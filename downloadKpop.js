@@ -9,6 +9,7 @@ var arr2 = [ ];
 var finalUrl = "";
 var url;
 var elements;
+var count = 0;
 
 casper.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
 
@@ -23,10 +24,9 @@ casper.then(function () {
 	}
 	stream.close();
 
-	for(var i = 0; i<2; i++)
-	{
-		
-		casper.sendKeys("#masthead-search-term", arr[i], { reset: true});
+	casper.repeat(arr.length, function() {
+		console.log("grabing url " + count);
+		casper.sendKeys("#masthead-search-term", arr[count], { reset: true});
 		casper.click(x('//*[@id="search-btn"]'));
 		//casper.capture("image" + i + ".png");
 
@@ -34,16 +34,22 @@ casper.then(function () {
 			//casper.capture("image" + i + ".png");
 
 			elements = casper.getElementsInfo(".yt-uix-tile-link");
+			var check = true;
 			elements.forEach(function(element){
 				//console.log(element.attributes["title"]);
 			    if (element.attributes["title"].indexOf("M/V") != -1 || element.attributes["title"].indexOf("Audio") != -1) 
 			    {
 			        url = element.attributes['href'];
-			        arr2.push(url);
+			        if(check)
+			        {
+			        	arr2.push(url);
+			        	check = false;
+			        }
 			    }
 			});
 		});
-	}
+		count++;
+	});
 });
 
 casper.then(function() {
