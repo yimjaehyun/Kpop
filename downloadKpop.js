@@ -23,8 +23,9 @@ casper.then(function () {
 	}
 	stream.close();
 
-	for(var i = 0; i<3; i++)
+	for(var i = 0; i<2; i++)
 	{
+		
 		casper.sendKeys("#masthead-search-term", arr[i], { reset: true});
 		casper.click(x('//*[@id="search-btn"]'));
 		//casper.capture("image" + i + ".png");
