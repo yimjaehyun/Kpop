@@ -19,11 +19,36 @@ request("http://music.naver.com/listen/top100.nhn?domain=TOTAL", function(error,
     console.log("Title: " + title);
   });
 
-  $('a._artist').each(function( index ) {
-  	var author = $(this).attr("title");
-  	authors.push(author);
-  	console.log("Author: " + author);
+  // $('a._artist').each(function( index ) {
+  // 	var author = $(this).attr("title");
+  // 	authors.push(author);
+  // 	console.log("Author: " + author);
+  // });
+
+  $('._artist').each(function( index ) {
+    var author = $(this).attr("title");
+
+    $("a[href*='#']")
+    {
+      if($(this).text() != null)
+      {
+        var str = $(this).text();
+        str=str.replace(/^\s+|\s+$/g,'');
+        authors.push(str);
+        console.log("Author: " + str);
+      }
+    }
+
+
+    // if(author != null)
+    // {
+    //   authors.push(author);
+    //   console.log("Author: " + author);
+    // }
   });
+
+console.log("songName.length = " + songName.length);
+console.log("authors.length = " + authors.length);
 
 for (var i = 0; i < authors.length; i++) {
 	total.push(authors[i] + " - " + songName[i]);
