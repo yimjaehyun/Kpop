@@ -35,8 +35,24 @@ request("http://music.naver.com/listen/top100.nhn?domain=TOTAL", function(error,
         var str = $(this).text();
         str=str.replace(/^\s+|\s+$/g,'');
         authors.push(str);
-        console.log("Author: " + str);
+        //console.log("Author: " + str);
       }
+    }
+
+    for (var i = 0; i< authors.length; i++) {
+      if(authors[i] == "{ARTIST}")
+        authors.splice(i,1);
+      if(i!=authors.length)
+      {
+        if(authors[i] == authors[i+1])
+          if (index > -1) {
+            authors.splice(i, 1);
+          }
+      }
+    }
+
+    for (var i = 0; i< authors.length; i++) {
+      console.log(authors[i]);
     }
 
 
