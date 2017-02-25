@@ -19,6 +19,8 @@ request("http://music.naver.com/listen/top100.nhn?domain=TOTAL", function(error,
     console.log("Title: " + title);
   });
 
+
+console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
   // $('a._artist').each(function( index ) {
   // 	var author = $(this).attr("title");
   // 	authors.push(author);
@@ -34,27 +36,18 @@ request("http://music.naver.com/listen/top100.nhn?domain=TOTAL", function(error,
       {
         var str = $(this).text();
         str=str.replace(/^\s+|\s+$/g,'');
+        if(str.indexOf("..") != -1)
+        {
+          if(str.indexOf("("))
+          {
+            var index = str.indexOf("(");
+            str = str.substring(0, index);
+          }
+        }
         authors.push(str);
         //console.log("Author: " + str);
       }
     }
-
-    for (var i = 0; i< authors.length; i++) {
-      if(authors[i] == "{ARTIST}")
-        authors.splice(i,1);
-      if(i!=authors.length)
-      {
-        if(authors[i] == authors[i+1])
-          if (index > -1) {
-            authors.splice(i, 1);
-          }
-      }
-    }
-
-    for (var i = 0; i< authors.length; i++) {
-      console.log(authors[i]);
-    }
-
 
     // if(author != null)
     // {
@@ -62,6 +55,31 @@ request("http://music.naver.com/listen/top100.nhn?domain=TOTAL", function(error,
     //   console.log("Author: " + author);
     // }
   });
+
+for (var i = 0; i< authors.length; i++) {
+      if(authors[i] == "{ARTIST}")
+        authors.splice(i,1);
+
+      if(i!=authors.length)
+      {
+        if(authors[i] == authors[i+1])
+        {
+          if(authors[i+1] == authors[i+2])
+          {
+            if(authors[i+2] == authors[i+3])
+            {
+              authors.splice(i,2);
+            }
+          }
+          else
+            authors.splice(i, 1);
+        }
+      }
+    }
+
+for (var i = 0; i< authors.length; i++) {
+  console.log(authors[i]);
+}
 
 console.log("songName.length = " + songName.length);
 console.log("authors.length = " + authors.length);

@@ -4,8 +4,8 @@ var casper = require('casper').create({
 
 var x = require('casper').selectXPath;
 var fs = require('fs');
-var arr = [];
-var arr2 = [ ];
+var arr = []; //is the music name and authors
+var arr2 = []; //is the urls
 var finalUrl = "";
 var url;
 var elements;
@@ -23,7 +23,7 @@ casper.then(function () {
 	    arr.push(line);
 	}
 	stream.close();
-
+	console.log("arr.length = " + arr.length);
 	casper.repeat(arr.length, function() {
 		console.log("grabing url " + count);
 		casper.sendKeys("#masthead-search-term", arr[count], { reset: true});
@@ -34,19 +34,26 @@ casper.then(function () {
 			//casper.capture("image" + i + ".png");
 
 			elements = casper.getElementsInfo(".yt-uix-tile-link");
+			var found = false;
 			var check = true;
 			elements.forEach(function(element){
 				//console.log(element.attributes["title"]);
-			    if (element.attributes["title"].indexOf("M/V") != -1 || element.attributes["title"].indexOf("Audio") != -1) 
+			    if (element.attributes["title"].indexOf("M/V") != -1 || element.attributes["title"].indexOf("Audio") != -1 || element.attributes["title"].indexOf("MP3") != -1 || element.attributes["title"].indexOf("lyrics") != -1 || element.attributes["title"].indexOf("subs") != -1) 
 			    {
 			        url = element.attributes['href'];
 			        if(check)
 			        {
 			        	arr2.push(url);
 			        	check = false;
+			        	found = true;
 			        }
 			    }
 			});
+			if(!found)
+			    {
+			    	var str = arr[count] + " not found";
+			    	arr2.push(str);
+			    }
 		});
 		count++;
 	});
@@ -64,7 +71,10 @@ casper.then(function() {
 casper.then(function () {
 	for(var i = 0; i <arr2.length; i++)
 	{
-		finalUrl += "https://www.youtube.com/" + arr2[i] + '\n';
+		if(arr2[i].indexOf("not found") != -1)
+			finalUrl += arr2[i] + '\n';
+		else
+			finalUrl += "https://www.youtube.com" + arr2[i] + '\n';
 	}
 	fs.write("url.txt", finalUrl);
 });
